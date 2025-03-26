@@ -7,10 +7,14 @@ Construire une application Vue pour des questionnaires. Cette application doit s
 ## Commandes Utiles
 npm run dev --host
 
-- Installer un environnement virtuel :  `virtualenv -p python3 venv`
-- Se mettre dans l'environnement virtuel : `source venv/bin/activate`
+
+### Si l'environnement virtuel n'est pas présent    
+- Installer un environnement virtuel :  `virtualenv -p python3 venv`    
+
+### Par la suite
+- Se mettre dans l'environnement virtuel : `source .venv/bin/activate`
 - Executer le fichier requirements.txt : `pip install -r requirements.txt`
-- se déplacer dans : cd quiz/
+- Se déplacer dans le répertoire Quiz: `cd quiz/`
 - Créer la base de données : `flask syncdb`
 - Charger la base de données : `flask loaddb`
 - Lancer le serveur : `flask run --debug`

@@ -9,14 +9,19 @@ export default {
     return data;
   },
   mounted(){
-    fetch('http://localhost:8000/quiz/api/v1.0/questionnaire')
+    fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
+    .then(response => response.json())
+    .then(json => {
+      this.questionnaires = json
+    })
   }
 }
 </script>
 
 <template>
   <h1>Hello</h1>
-  {{ questionnaires[0].name }}
+  <li v-for="question in questionnaires"> {{ question.name }} </li>
+  
 </template>
 
 
