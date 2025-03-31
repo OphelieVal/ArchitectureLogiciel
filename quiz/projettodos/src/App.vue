@@ -1,6 +1,7 @@
 <script>
 
 import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
+import QuestionnaireItem from './components/questionnaireItem.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}]
@@ -28,19 +29,19 @@ export default {
     .then(json => {
       this.questionnaires = json
     })
-  }
+  },
+  components: { QuestionnaireItem }
 }
 </script>
 
 <template>
   <h1>Hello</h1>
-  <li v-for="question in questionnaires"> 
-    {{ question.name }} 
-  <AjouterQuestionnaire>
-      v-for="q of questionnaires" :questionnaire="q"
-      @add="addQuestionnaire">
-  </AjouterQuestionnaire>
+  <li>
+    <QuestionnaireItem
+      v-for="q of questionnaires" :questionnaire="q">
+    </QuestionnaireItem>
   </li>
+
 </template>
 
 
