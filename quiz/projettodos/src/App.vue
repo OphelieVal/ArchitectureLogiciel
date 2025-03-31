@@ -1,4 +1,6 @@
 <script>
+
+import QuestionnaireItem from './components/questionnaireItem.vue';
 import SupprQuestionnaire from './components/SupprQuestionnaire.vue';
 
 let data = {
@@ -29,7 +31,7 @@ export default {
       this.questionnaires = json
     })
   },
-  components : {SupprQuestionnaire}
+  components: { QuestionnaireItem, SupprQuestionnaire },
 }
 </script>
 
@@ -40,9 +42,12 @@ rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin
 ="anonymous">
   <div class="container">
     <h1>Hello</h1>
-    <ol>
+    <li>
+      <QuestionnaireItem
+        v-for="q of questionnaires" :questionnaire="q">
         <SupprQuestionnaire v-for="item of questionnaires" :questionnaire="item" @remove="remove_questionnaires($event)"></SupprQuestionnaire>
-    </ol>
+      </QuestionnaireItem>
+    </li>
   </div>
   
 </template>
