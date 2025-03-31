@@ -20,7 +20,7 @@ export default {
         }
         return null;
       },
-    remove_questionnaires($event) {
+    remove_questionnaire($event) {
         this.questionnaires.splice(this.questionnaires.indexOf(this.get_by_id($event.id)), 1)
       },
   },
@@ -42,11 +42,9 @@ rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin
 ="anonymous">
   <div class="container">
     <h1>Hello</h1>
-    <li>
-      <QuestionnaireItem
-        v-for="q of questionnaires" :questionnaire="q">
-        <SupprQuestionnaire v-for="item of questionnaires" :questionnaire="item" @remove="remove_questionnaires($event)"></SupprQuestionnaire>
-      </QuestionnaireItem>
+    <li v-for="q of questionnaires" :questionnaire="q">
+      <QuestionnaireItem :questionnaire="q" />
+        <SupprQuestionnaire :questionnaire="q" @remove="remove_questionnaire($event)" />
     </li>
   </div>
   
