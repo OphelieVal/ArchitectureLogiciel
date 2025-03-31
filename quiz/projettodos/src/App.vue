@@ -4,7 +4,8 @@ import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
 import QuestionnaireItem from './components/questionnaireItem.vue';
 
 let data = {
-  questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}]
+  questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
+  newQuestionnaire: ''
 }
 
 export default {
@@ -12,14 +13,13 @@ export default {
     return data;
   },
   methods: {
-    addQuestionnaire: function () {
-      let text = this.newItem.trim();
-      if (text) {
-        this.todos.push({
-          text: text,
-          checked: false
+    addQuestionnaire() {
+      let name = this.newQuestionnaire.trim();
+      if (name) {
+        this.questionnaires.push({
+          name: name,
         });
-        this.newItem = '';
+        this.newQuestionnaire = '';
       }
     }
   },
@@ -30,18 +30,17 @@ export default {
       this.questionnaires = json
     })
   },
-  components: { QuestionnaireItem }
+  components: { QuestionnaireItem, AjouterQuestionnaire }
 }
 </script>
 
 <template>
   <h1>Hello</h1>
-  <li>
-    <QuestionnaireItem
-      v-for="q of questionnaires" :questionnaire="q">
+  <li v-for="q of questionnaires" :questionnaire="q">
+    <QuestionnaireItem :questionnaire="q">
     </QuestionnaireItem>
-  </li>
-
+    <AjouterQuestionnaire @add="addQuestionnaire"></AjouterQuestionnaire> 
+   </li>
 </template>
 
 
