@@ -13,13 +13,11 @@ export default {
     return data;
   },
   methods: {
-    addQuestionnaire() {
-      let name = this.newQuestionnaire.trim();
+    addQuestionnaire(name) {
       if (name) {
         this.questionnaires.push({
           name: name,
         });
-        this.newQuestionnaire = '';
       }
     }
   },
@@ -39,8 +37,9 @@ export default {
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q">
     </QuestionnaireItem>
-    <AjouterQuestionnaire @add="addQuestionnaire"></AjouterQuestionnaire> 
    </li>
+       <AjouterQuestionnaire @add="addQuestionnaire"/>
+
 </template>
 
 

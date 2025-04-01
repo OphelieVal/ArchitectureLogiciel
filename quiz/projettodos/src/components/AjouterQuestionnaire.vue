@@ -5,14 +5,14 @@ export default{
     },
     data() {
         return {
-            newName: '',
+            newQuestionnaire: '',
         };
     },
     methods : {
         add: function() {
-            let name = this.newName.trim();
+            let name = this.newQuestionnaire.trim();
             this.$emit('add', name); 
-            this.newName = '';
+            this.newQuestionnaire = '';
         }
     },
     emits : ['add'],
