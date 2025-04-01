@@ -26,10 +26,10 @@ export default {
         body: JSON.stringify({ name: name }),
       })
       .then(response => {
-                  if (response.ok) return response.json();
-                  else throw new Error('Problème ajax: '+response.status);
-                }
-            )
+        if (response.ok) return response.json();
+          else throw new Error('Problème ajax: '+response.status);
+        }
+      )
       .then(data => {
         this.questionnaires.push(data.questionnaire);
       })
@@ -60,7 +60,7 @@ export default {
           this.modifQuestionnaire = null;
         })
         .catch(error => {
-          console.error('Erreur lors de la modification du questionnaire :', error);
+          console.error(error);
         });
       }
     } 
@@ -80,14 +80,13 @@ export default {
   <h1>Hello</h1>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
-    <button @click="updateQuestionnaire(q)">Modifier</button>
+    <button @click="modifQuestionnaire=q">Modifier</button>
    </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
     <ModifierQuestionnaire 
       v-if="modifQuestionnaire" :questionnaire="modifQuestionnaire"
-      @click="updateQuestionnaire"
-      @cancel="modifQuestionnaire = null"
+      @update="updateQuestionnaire"
     />
 </template>
 
