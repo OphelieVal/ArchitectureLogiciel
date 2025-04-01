@@ -15,9 +15,25 @@ export default {
   methods: {
     addQuestionnaire(name) {
       if (name) {
-        this.questionnaires.push({
-          name: name,
-        });
+      const requete = "http://127.0.0.1:5000/quiz/api/v1.0/questionnaire";
+      fetch(requete, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: name }),
+      })
+      .then(response => {
+                  if (response.ok) return response.json();
+                  else throw new Error('Problème ajax: '+response.status);
+                }
+            )
+      .then(data => {
+        this.questionnaires.push(data.questionnaire);
+      })
+      .catch(error => {
+        console.error(error);
+      });
       }
     }
   },
