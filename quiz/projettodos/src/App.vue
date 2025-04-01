@@ -38,15 +38,15 @@ export default {
       });
       }
     },
-    updateQuestionnaire() {
-      if (this.modifQuestionnaire) {
-        const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${this.modifQuestionnaire.id}`;
+    updateQuestionnaire(nvQuest) {
+      if (nvQuest) {
+        const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${nvQuest.id}`;
         fetch(requete, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: this.modifQuestionnaire.name }),
+          body: JSON.stringify({ name: nvQuest.name }),
         })
         .then(response => {
           if (!response.ok) {
@@ -80,13 +80,13 @@ export default {
   <h1>Hello</h1>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
-    <button @update="updateQuestionnaire(q)">Modifier</button>
+    <button @click="updateQuestionnaire(q)">Modifier</button>
    </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
     <ModifierQuestionnaire 
-      v-if="modifQuestionnaire":questionnaire="modifQuestionnaire"
-      @update="updateQuestionnaire"
+      v-if="modifQuestionnaire" :questionnaire="modifQuestionnaire"
+      @click="updateQuestionnaire"
       @cancel="modifQuestionnaire = null"
     />
 </template>

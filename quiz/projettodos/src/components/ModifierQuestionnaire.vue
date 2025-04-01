@@ -10,7 +10,7 @@ export default{
     },
     methods : {
         update: function() {
-            this.$emit('update', {name: this.nvQuestionnaire });
+            this.$emit('update', {  id: this.questionnaire.id, name: this.nvQuestionnaire });
         }
     },
     emits : ['update'],
@@ -24,7 +24,7 @@ export default{
         placeholder="Entrer le nom du questionnaire"
         type="text"
         class="form-control">
-        <span><input type="button" value="Save questionnaire"><br></span>
+        <button @click="update">Enregistrer</button>
         <span><input type="button" value="Modify questionnaire"><br></span>
     </div>
 </template>
