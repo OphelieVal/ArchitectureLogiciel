@@ -84,10 +84,11 @@ export default {
    </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
-    <div v-if="modifQuestionnaire">
-      <input v-model="modifQuestionnaire.name" placeholder="Nom du questionnaire"/>
-      <button @update="updateQuestionnaire">Enregistrer</button>
-    </div>
+    <ModifierQuestionnaire 
+      v-if="modifQuestionnaire":questionnaire="modifQuestionnaire"
+      @update="updateQuestionnaire"
+      @cancel="modifQuestionnaire = null"
+    />
 </template>
 
 
