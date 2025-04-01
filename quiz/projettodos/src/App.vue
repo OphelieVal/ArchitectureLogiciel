@@ -2,12 +2,14 @@
 
 import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
 import ModifierQuestionnaire from './components/ModifierQuestionnaire.vue';
+import QuestionItem from './components/QuestionItem.vue';
 import QuestionnaireItem from './components/questionnaireItem.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
   newQuestionnaire: '',
-  modifQuestionnaire: null
+  modifQuestionnaire: null,
+  questions: []
 }
 
 export default {
@@ -63,7 +65,30 @@ export default {
           console.error(error);
         });
       }
-    } 
+    },
+    getQuestions(id) {
+      if (id) {
+      const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}/question`;
+      fetch(requete, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.ok) return response.json();
+          else throw new Error('Problème ajax: '+response.status);
+        }
+      )
+      .then(data => {
+        console.log(data)
+        this.questions = data
+      })
+      .catch(error => {
+        console.error(error);
+      });
+      }
+    },
   },
   mounted(){
     fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
@@ -72,15 +97,17 @@ export default {
       this.questionnaires = json
     })
   },
-  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire }
+  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem }
 }
 </script>
 
 <template>
-  <h1>Hello</h1>
+  <h1>QUIZ</h1>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
     <button @click="modifQuestionnaire=q">Modifier</button>
+    <button @click="getQuestions(q.id)">voir les questions</button>
+
    </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
@@ -88,6 +115,12 @@ export default {
       v-if="modifQuestionnaire" :questionnaire="modifQuestionnaire"
       @update="updateQuestionnaire"
     />
+    
+    <div v-if="questions">
+      <li v-for="quest in questions" :question="quest.idQuestion">
+        <QuestionItem :question="quest" />
+      </li>
+    </div>
 </template>
 
 
