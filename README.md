@@ -5,7 +5,7 @@ Construire une application Vue pour des questionnaires. Cette application doit s
 
 
 ## Commandes Utiles
-npm run dev --host
+`npm run dev --host`
 
 
 ### Si l'environnement virtuel n'est pas présent    
