@@ -6,6 +6,7 @@ import SupprQuestionnaire from './components/questionnaire/SupprQuestionnaire.vu
 
 import QuestionItem from './components/question/QuestionItem.vue';
 import AjouterQuestion from './components/question/AjouterQuestion.vue';
+import ModifierQuestion from './components/question/ModifierQuestion.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
@@ -15,6 +16,7 @@ let data = {
   questions: [],
   newQuestion: '',
   questionnaireId: null,
+  modifQuestion: null
 }
 
 export default {
@@ -71,6 +73,38 @@ export default {
         });
       }
     },
+    get_by_id: function(id) {
+      for (let i = 0; i < this.questionnaires.length; i++) {
+        if (this.questionnaires[i].id == id) {
+          return this.questionnaires[i];
+        }
+      }
+      return null;
+    },
+    remove_questionnaire(id) {
+      if (id) {
+        const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}`;
+        
+        fetch(requete, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Problème ajax: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(() => {
+          this.questionnaires = this.questionnaires.filter(q => q.id !== id);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
+    },
     getQuestions(id) {
       if (id) {
       const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}/question`;
@@ -118,38 +152,32 @@ export default {
       });
       }
     },
-    get_by_id: function(id) {
-        for (let i = 0; i < this.questionnaires.length; i++) {
-          if (this.questionnaires[i].id == id) {
-            return this.questionnaires[i];
+    updateQuestion(nvQuest) {
+      if (nvQuest) {
+        const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${this.questionnaireId}/question/${nvQuest.idQuestion}`;
+        fetch(requete, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({title: nvQuest.title}),
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Problème ajax: ' + response.status);
           }
-        }
-        return null;
-      },
-      remove_questionnaire(id) {
-        if (id) {
-          const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}`;
-          
-          fetch(requete, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Problème ajax: ' + response.status);
-            }
-            return response.json();
-          })
-          .then(() => {
-            this.questionnaires = this.questionnaires.filter(q => q.id !== id);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-        }
+          return response.json();
+        })
+        .then(data => {
+          const index = this.questions.findIndex(q => q.id === data.id);
+          this.questions[index].title = nvQuest.title;
+          this.modifQuestion = null;
+        })
+        .catch(error => {
+          console.error(error);
+        });
       }
+    },
   },
 
   mounted(){
@@ -159,7 +187,7 @@ export default {
       this.questionnaires = json
     })
   },
-  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, SupprQuestionnaire, QuestionItem, AjouterQuestion }
+  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, SupprQuestionnaire, QuestionItem, AjouterQuestion, ModifierQuestion }
 }
 </script>
 
@@ -188,12 +216,16 @@ export default {
     <div v-if="questions">
       <li v-for="quest in questions" :question="quest.idQuestion">
         <QuestionItem :question="quest" />
+        <button @click="modifQuestion=quest">Modifier</button>
       </li>
     </div>
     <AjouterQuestion
     v-if="questionnaireId"
     :idQuestionnaire="questionnaireId"
     @add="addQuestion"/>
+    <ModifierQuestion
+      v-if="modifQuestion" :question="modifQuestion"
+      @update="updateQuestion"/>
   </div>
   </div>
 </template>
