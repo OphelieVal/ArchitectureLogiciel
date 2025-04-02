@@ -4,12 +4,16 @@ import AjouterQuestionnaire from './components/questionnaire/AjouterQuestionnair
 import ModifierQuestionnaire from './components/questionnaire/ModifierQuestionnaire.vue';
 import QuestionItem from './components/question/QuestionItem.vue';
 import QuestionnaireItem from './components/questionnaire/questionnaireItem.vue';
+import AjouterQuestion from './components/question/AjouterQuestion.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
   newQuestionnaire: '',
   modifQuestionnaire: null,
-  questions: []
+
+  questions: [],
+  newQuestion: '',
+  questionnaireId: null,
 }
 
 export default {
@@ -97,14 +101,16 @@ export default {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: question }),
+        body: JSON.stringify({ title: question, questionType: "facile", questionnaire_id: idQuestionnaire}),
       })
       .then(response => {
         if (response.ok) return response.json();
         else throw new Error('Problème ajax: ' + response.status);
       })
       .then(data => {
-        this.questions.push(data);
+        console.log(data)
+        this.questions.push(data.question);
+        console.log(this.questions)
       })
       .catch(error => {
         console.error(error);
@@ -119,7 +125,7 @@ export default {
       this.questionnaires = json
     })
   },
-  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem }
+  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem, AjouterQuestion }
 }
 </script>
 
@@ -133,7 +139,7 @@ export default {
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
     <button @click="modifQuestionnaire=q">Modifier</button>
-    <button @click="getQuestions(q.id)">voir les questions</button>
+    <button @click="getQuestions(q.id), questionnaireId = q.id">voir les questions</button>
     </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
@@ -149,6 +155,10 @@ export default {
         <QuestionItem :question="quest" />
       </li>
     </div>
+    <AjouterQuestion
+    v-if="questionnaireId"
+    :idQuestionnaire="questionnaireId"
+    @add="addQuestion"/>
   </div>
   </div>
 </template>
