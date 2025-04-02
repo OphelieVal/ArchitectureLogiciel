@@ -72,6 +72,38 @@ export default {
         });
       }
     },
+    get_by_id: function(id) {
+      for (let i = 0; i < this.questionnaires.length; i++) {
+        if (this.questionnaires[i].id == id) {
+          return this.questionnaires[i];
+        }
+      }
+      return null;
+    },
+    removeQuestionnaire(id) {
+      if (id) {
+        const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}`;
+        
+        fetch(requete, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Problème ajax: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(() => {
+          this.questionnaires = this.questionnaires.filter(q => q.id !== id);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
+    },
     getQuestions(id) {
       if (id) {
       const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}/question`;
@@ -119,43 +151,28 @@ export default {
       });
       }
     },
-    get_by_id: function(id) {
-        for (let i = 0; i < this.questionnaires.length; i++) {
-          if (this.questionnaires[i].id == id) {
-            return this.questionnaires[i];
-          }
+    removeQuestion(idQuestion) {
+      const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${this.questionnaireId}/question/${idQuestion}`;
+      fetch(requete, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Problème ajax: ' + response.status);
         }
-        return null;
-      },
-      removeQuestionnaire(id) {
-        if (id) {
-          const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}`;
-          
-          fetch(requete, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Problème ajax: ' + response.status);
-            }
-            return response.json();
-          })
-          .then(() => {
-            this.questionnaires = this.questionnaires.filter(q => q.id !== id);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-        }
-      },
-      removeQuestion(idQuestion) {
+        return response.json();
+      })
+      .then(() => {
         this.questions = this.questions.filter(q => q.idQuestion !== idQuestion);
-      }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
   },
-
   mounted(){
     fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
     .then(response => response.json())
@@ -192,12 +209,12 @@ export default {
   <div class="questions">
   <h2>Questions</h2>
     <div v-if="questions">
-      <li v-for="quest in questions" :question="quest.idQuestion">
+      <li v-for="quest in questions" :question="quest">
         <QuestionItem :question="quest" />
         <SupprQuestion 
           :question="quest" 
           :questionnaireId="questionnaireId" 
-          @remove="removeQuestion"
+          @remove="removeQuestion(quest.idQuestion)"
         />
       </li>
     </div>
@@ -214,11 +231,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 80px; /* Augmenté pour plus d'espace */
+  gap: 80px;
   padding: 30px;
   font-family: Arial, sans-serif;
-  min-height: 100vh; /* Pour éviter que ça ne coupe */
-  overflow-y: auto; /* Pour scroller si nécessaire */
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 /* STYLE DES QUESTIONNAIRES */
@@ -230,8 +247,6 @@ export default {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-
 .questionnaires h2 {
   text-align: center;
   color: #333;
@@ -241,7 +256,7 @@ export default {
 .questionnaires li {
   list-style: none;
   background: #ffffff;
-  margin: 15px 0; /* Plus d'espace entre les items */
+  margin: 15px 0;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -270,7 +285,7 @@ export default {
 .questions li {
   list-style: none;
   background: #ffffff;
-  margin: 15px 0; /* Plus d'espace */
+  margin: 15px 0;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -287,7 +302,7 @@ button {
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  margin: 8px; /* Plus d'espace entre les boutons */
+  margin: 8px; 
   font-size: 16px;
   font-weight: bold;
   transition: background 0.3s ease-in-out, transform 0.1s;
