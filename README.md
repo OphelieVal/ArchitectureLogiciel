@@ -1,21 +1,23 @@
 # ArchitectureLogiciel
 
-## Sujet    
-Construire une application Vue pour des questionnaires. Cette application doit se connecter à un serveur REST. Il doit être possible de récupérer, modifier, créer et supprimer des questionnaires et des questions.    
+## Informations du groupe
+AKHTAR Naima
+VALIN Ophélie
+TD 2A1
 
+## Fonctionnalitées implémentées 
 
-## Commandes Utiles
-`npm run dev --host`
+- CRUD sur les questionnaires (add, delete, update)
+- CRUD sur les questions (get, add, delete, update)
 
-
-### Si l'environnement virtuel n'est pas présent    
+## Lancer le projet
 - Installer un environnement virtuel :  `virtualenv -p python3 venv`    
-
-### Par la suite
 - Se mettre dans l'environnement virtuel : `source .venv/bin/activate`
 - Executer le fichier requirements.txt : `pip install -r requirements.txt`
 - Se déplacer dans le répertoire Quiz: `cd quiz/`
 - Créer la base de données : `flask syncdb`
 - Charger la base de données : `flask loaddb`
 - Lancer le serveur : `flask run --debug`
-- Ouvrir le fichier quiz.html ()
+- Se déplacer dans : `cd projettodos/src/`
+- Lancer npm : `npm run dev --host` (il faut posséder npm : `npm install`)
+- Cliquer sur le lien donné par npm
