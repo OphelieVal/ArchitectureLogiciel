@@ -7,8 +7,10 @@ TD 2A1
 
 ## Fonctionnalitées implémentées 
 
+- Récupération serveur : Naima TP précédent
 - CRUD sur les questionnaires (add, delete, update)
 - CRUD sur les questions (get, add, delete, update)
+
 
 ## Lancer le projet
 - Installer un environnement virtuel :  `virtualenv -p python3 venv`    
