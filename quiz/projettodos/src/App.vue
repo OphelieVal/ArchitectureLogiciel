@@ -102,25 +102,43 @@ export default {
 </script>
 
 <template>
-  <h1>QUIZ</h1>
+    <h1>QUIZ</h1>
+
+  <div class="quiz">
+
+  <div class="questionnaires">
+  <h2>Questionnaire</h2>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
     <button @click="modifQuestionnaire=q">Modifier</button>
     <button @click="getQuestions(q.id)">voir les questions</button>
-
-   </li>
+    </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
     <ModifierQuestionnaire 
       v-if="modifQuestionnaire" :questionnaire="modifQuestionnaire"
       @update="updateQuestionnaire"
     />
-    
+  </div>
+  <div class="questions">
+  <h2>Questions</h2>
     <div v-if="questions">
       <li v-for="quest in questions" :question="quest.idQuestion">
         <QuestionItem :question="quest" />
       </li>
     </div>
+  </div>
+  </div>
 </template>
 
 
+<style>
+.quiz {
+  display: flex;
+  justify-content: space-between;
+  gap: 300px;
+}
+
+
+
+</style>
