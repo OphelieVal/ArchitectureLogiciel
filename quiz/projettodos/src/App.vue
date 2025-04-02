@@ -1,10 +1,10 @@
 <script>
-import QuestionnaireItem from './components/questionnaireItem.vue';
-import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
-import ModifierQuestionnaire from './components/ModifierQuestionnaire.vue';
-import SupprQuestionnaire from './components/SupprQuestionnaire.vue';
+import QuestionnaireItem from './components/questionnaire/questionnaireItem.vue';
+import AjouterQuestionnaire from './components/questionnaire/AjouterQuestionnaire.vue';
+import ModifierQuestionnaire from './components/questionnaire/ModifierQuestionnaire.vue';
+import SupprQuestionnaire from './components/questionnaire/SupprQuestionnaire.vue';
 
-import QuestionItem from './components/QuestionItem.vue';
+import QuestionItem from './components/question/QuestionItem.vue';
 import AjouterQuestion from './components/question/AjouterQuestion.vue';
 
 let data = {
@@ -118,17 +118,17 @@ export default {
       });
       }
     },
-  },
-  get_by_id: function(id) {
-      for (let i = 0; i < this.questionnaires.length; i++) {
-        if (this.questionnaires[i].id == id) {
-          return this.questionnaires[i];
+    get_by_id: function(id) {
+        for (let i = 0; i < this.questionnaires.length; i++) {
+          if (this.questionnaires[i].id == id) {
+            return this.questionnaires[i];
+          }
         }
-      }
-      return null;
+        return null;
+      },
+    remove_questionnaire($event) {
+      this.questionnaires.splice(this.questionnaires.indexOf(this.get_by_id($event.id)), 1)
     },
-  remove_questionnaire($event) {
-    this.questionnaires.splice(this.questionnaires.indexOf(this.get_by_id($event.id)), 1)
   },
   mounted(){
     fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
