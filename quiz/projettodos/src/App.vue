@@ -90,6 +90,7 @@ export default {
       });
       }
     },
+  },
     get_by_id: function(id) {
         for (let i = 0; i < this.questionnaires.length; i++) {
           if (this.questionnaires[i].id == id) {
@@ -98,30 +99,9 @@ export default {
         }
         return null;
       },
-      remove_questionnaire(event) {
-        if (event) {
-          const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${event.id}`;
-          
-          fetch(requete, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Problème ajax: ' + response.status);
-            }
-            return response.json();
-          })
-          .then(() => {
-            this.questionnaires = this.questionnaires.filter(q => q.id !== event.id);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-        }
-      },
+    remove_questionnaire($event) {
+      this.questionnaires.splice(this.questionnaires.indexOf(this.get_by_id($event.id)), 1)
+    },
     mounted(){
       fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
       .then(response => response.json())
@@ -129,7 +109,6 @@ export default {
         this.questionnaires = json
       })
     },
-  },
   components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem, SupprQuestionnaire}
 }
 </script>
@@ -138,7 +117,7 @@ export default {
   <h1>QUIZ</h1>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
-    <SupprQuestionnaire :questionnaire="q" @remove="remove_questionnaire($event)" />
+      <SupprQuestionnaire :questionnaire="q" @remove="remove_questionnaire($event)" />
     <button @click="modifQuestionnaire=q">Modifier</button>
     <button @click="getQuestions(q.id)">voir les questions</button>
 
