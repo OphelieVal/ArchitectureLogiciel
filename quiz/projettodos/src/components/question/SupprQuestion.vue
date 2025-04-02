@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <button @click="suppr">X</button>
+  <button class="btn btn-default" @click="suppr">X</button>
 </template>
 
 <style scoped>

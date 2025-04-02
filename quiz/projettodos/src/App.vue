@@ -6,7 +6,7 @@ import SupprQuestionnaire from './components/questionnaire/SupprQuestionnaire.vu
 
 import QuestionItem from './components/question/QuestionItem.vue';
 import AjouterQuestion from './components/question/AjouterQuestion.vue';
-import SupprQuestion from './components/SupprQuestion.vue';
+import SupprQuestion from './components/question/SupprQuestion.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
@@ -176,9 +176,11 @@ export default {
   <h2>Questionnaires</h2>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
+    <div class="questionnaire-actions">
       <SupprQuestionnaire :questionnaire="q" @remove="removeQuestionnaire(q.id)" />
-    <button @click="modifQuestionnaire=q">Modifier</button>
-    <button @click="getQuestions(q.id), questionnaireId = q.id">voir les questions</button>
+      <button class="btn btn-dark" @click="modifQuestionnaire=q">Modifier</button>
+      <button class="btn btn-info" @click="getQuestions(q.id), questionnaireId = q.id">Voir les questions</button>
+    </div>
     </li>
     <AjouterQuestionnaire @add="addQuestionnaire"/>
 
@@ -211,6 +213,103 @@ export default {
 .quiz {
   display: flex;
   justify-content: space-between;
-  gap: 300px;
+  align-items: flex-start;
+  gap: 80px; /* Augmenté pour plus d'espace */
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  min-height: 100vh; /* Pour éviter que ça ne coupe */
+  overflow-y: auto; /* Pour scroller si nécessaire */
+}
+
+/* STYLE DES QUESTIONNAIRES */
+.questionnaires {
+  width: 45%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.questionnaires h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.questionnaires li {
+  list-style: none;
+  background: #ffffff;
+  margin: 15px 0; /* Plus d'espace entre les items */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.questionnaires li:hover {
+  transform: scale(1.03);
+}
+
+/* STYLE DES QUESTIONS */
+.questions {
+  width: 50%;
+  background-color: #eef1f7;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.questions h2 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.questions li {
+  list-style: none;
+  background: #ffffff;
+  margin: 15px 0; /* Plus d'espace */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.questions li:hover {
+  transform: scale(1.03);
+}
+
+/* BOUTONS */
+button {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 8px; /* Plus d'espace entre les boutons */
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out, transform 0.1s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.btn-autre:hover {
+  background-color: #0056b3;
+}
+
+.btn-autre:active {
+  background-color: #003f7f;
+}
+
+button.delete {
+  background-color: #dc3545;
+}
+
+button.delete:hover {
+  background-color: #a71d2a;
 }
 </style>

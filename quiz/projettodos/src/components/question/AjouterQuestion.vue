@@ -29,7 +29,7 @@ export default{
             class="form-control">
         <span class="input-group-btn">
             <button @click="add"
-            class="btn btn-default"
+            class="btn btn-dark"
             type="button">Ajouter</button>
         </span>
     </div>
