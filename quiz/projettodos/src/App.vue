@@ -1,9 +1,9 @@
 <script>
 
-import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
-import ModifierQuestionnaire from './components/ModifierQuestionnaire.vue';
-import QuestionItem from './components/QuestionItem.vue';
-import QuestionnaireItem from './components/questionnaireItem.vue';
+import AjouterQuestionnaire from './components/questionnaire/AjouterQuestionnaire.vue';
+import ModifierQuestionnaire from './components/questionnaire/ModifierQuestionnaire.vue';
+import QuestionItem from './components/question/QuestionItem.vue';
+import QuestionnaireItem from './components/questionnaire/questionnaireItem.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
@@ -89,6 +89,28 @@ export default {
       });
       }
     },
+    addQuestion(question, idQuestionnaire) {
+    if (question && idQuestionnaire) {
+      const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${idQuestionnaire}/question`;
+      fetch(requete, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: question }),
+      })
+      .then(response => {
+        if (response.ok) return response.json();
+        else throw new Error('Problème ajax: ' + response.status);
+      })
+      .then(data => {
+        this.questions.push(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+      }
+    },
   },
   mounted(){
     fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
@@ -107,7 +129,7 @@ export default {
   <div class="quiz">
 
   <div class="questionnaires">
-  <h2>Questionnaire</h2>
+  <h2>Questionnaires</h2>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
     <button @click="modifQuestionnaire=q">Modifier</button>
@@ -131,14 +153,10 @@ export default {
   </div>
 </template>
 
-
 <style>
 .quiz {
   display: flex;
   justify-content: space-between;
   gap: 300px;
 }
-
-
-
 </style>
