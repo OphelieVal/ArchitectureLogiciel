@@ -2,7 +2,6 @@
 export default{
     props: {
         idQuestionnaire : Number,
-        questionnaire : Object
     },
     data() {
         return {
