@@ -182,7 +182,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({title: nvQuest.title}),
+          body: JSON.stringify({ title: nvQuest.title }),
         })
         .then(response => {
           if (!response.ok) {
@@ -191,7 +191,7 @@ export default {
           return response.json();
         })
         .then(data => {
-          const index = this.questions.findIndex(q => q.id === data.id);
+          const index = this.questions.findIndex(q => q.idQuestion === data.idQuestion);
           this.questions[index].title = nvQuest.title;
           this.modifQuestion = null;
         })
@@ -200,6 +200,19 @@ export default {
         });
       }
     },
+    setModifQuestionnaire(q) {
+      this.modifQuestionnaire = null;
+      this.$nextTick(() => { 
+        this.modifQuestionnaire = q;
+      });
+    },
+    setModifQuestion(quest) {
+    this.modifQuestion = null;
+    this.$nextTick(() => {
+      this.modifQuestion = quest;
+    });
+  }
+
   },
   mounted(){
     fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
@@ -223,7 +236,7 @@ export default {
     <QuestionnaireItem :questionnaire="q"/>
     <div class="questionnaire-actions">
       <SupprQuestionnaire :questionnaire="q" @remove="removeQuestionnaire(q.id)" />
-      <button class="btn btn-dark" @click="modifQuestionnaire=q">Modifier</button>
+      <button class="btn btn-dark" @click="setModifQuestionnaire(q)">Modifier</button>
       <button class="btn btn-info" @click="getQuestions(q.id), questionnaireId = q.id">Voir les questions</button>
     </div>
     </li>
@@ -244,7 +257,7 @@ export default {
           :questionnaireId="questionnaireId" 
           @remove="removeQuestion(quest.idQuestion)"
         />
-        <button @click="modifQuestion=quest">Modifier</button>
+        <button @click="setModifQuestion(quest)">Modifier</button>
       </li>
     </div>
     <AjouterQuestion
@@ -270,7 +283,7 @@ export default {
   overflow-y: auto;
 }
 
-/* STYLE DES QUESTIONNAIRES */
+
 .questionnaires {
   width: 45%;
   background-color: #f8f9fa;
@@ -299,7 +312,7 @@ export default {
   transform: scale(1.03);
 }
 
-/* STYLE DES QUESTIONS */
+
 .questions {
   width: 50%;
   background-color: #eef1f7;
@@ -344,19 +357,4 @@ button:hover {
   transform: scale(1.05);
 }
 
-.btn-autre:hover {
-  background-color: #0056b3;
-}
-
-.btn-autre:active {
-  background-color: #003f7f;
-}
-
-button.delete {
-  background-color: #dc3545;
-}
-
-button.delete:hover {
-  background-color: #a71d2a;
-}
 </style>

@@ -24,5 +24,5 @@ export default{
         placeholder="Entrer le nouveau nom"
         type="text"
         class="form-control">
-    <button @click="update">Enregistrer</button>
+    <button class="btn btn-success" @click="update">Enregistrer</button>
 </template>
