@@ -6,6 +6,7 @@ import SupprQuestionnaire from './components/questionnaire/SupprQuestionnaire.vu
 
 import QuestionItem from './components/question/QuestionItem.vue';
 import AjouterQuestion from './components/question/AjouterQuestion.vue';
+import SupprQuestion from './components/SupprQuestion.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
@@ -126,7 +127,7 @@ export default {
         }
         return null;
       },
-      remove_questionnaire(id) {
+      removeQuestionnaire(id) {
         if (id) {
           const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${id}`;
           
@@ -149,6 +150,9 @@ export default {
             console.error(error);
           });
         }
+      },
+      removeQuestion(idQuestion) {
+        this.questions = this.questions.filter(q => q.idQuestion !== idQuestion);
       }
   },
 
@@ -159,7 +163,7 @@ export default {
       this.questionnaires = json
     })
   },
-  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, SupprQuestionnaire, QuestionItem, AjouterQuestion }
+  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, SupprQuestionnaire, QuestionItem, AjouterQuestion, SupprQuestion}
 }
 </script>
 
@@ -172,7 +176,7 @@ export default {
   <h2>Questionnaires</h2>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
-      <SupprQuestionnaire :questionnaire="q" @remove="remove_questionnaire(q.id)" />
+      <SupprQuestionnaire :questionnaire="q" @remove="removeQuestionnaire(q.id)" />
     <button @click="modifQuestionnaire=q">Modifier</button>
     <button @click="getQuestions(q.id), questionnaireId = q.id">voir les questions</button>
     </li>
@@ -188,6 +192,11 @@ export default {
     <div v-if="questions">
       <li v-for="quest in questions" :question="quest.idQuestion">
         <QuestionItem :question="quest" />
+        <SupprQuestion 
+          :question="quest" 
+          :questionnaireId="questionnaireId" 
+          @remove="removeQuestion"
+        />
       </li>
     </div>
     <AjouterQuestion
