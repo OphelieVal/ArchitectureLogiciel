@@ -4,6 +4,7 @@ import AjouterQuestionnaire from './components/AjouterQuestionnaire.vue';
 import ModifierQuestionnaire from './components/ModifierQuestionnaire.vue';
 import QuestionItem from './components/QuestionItem.vue';
 import QuestionnaireItem from './components/questionnaireItem.vue';
+import SupprQuestionnaire from './components/SupprQuestionnaire.vue';
 
 let data = {
   questionnaires: [{id: 0, name: "hello"},{id: 1, name: "questionnaire"}],
@@ -89,15 +90,47 @@ export default {
       });
       }
     },
+    get_by_id: function(id) {
+        for (let i = 0; i < this.questionnaires.length; i++) {
+          if (this.questionnaires[i].id == id) {
+            return this.questionnaires[i];
+          }
+        }
+        return null;
+      },
+      remove_questionnaire(event) {
+        if (event) {
+          const requete = `http://127.0.0.1:5000/quiz/api/v1.0/questionnaire/${event.id}`;
+          
+          fetch(requete, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Problème ajax: ' + response.status);
+            }
+            return response.json();
+          })
+          .then(() => {
+            this.questionnaires = this.questionnaires.filter(q => q.id !== event.id);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        }
+      },
+    mounted(){
+      fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
+      .then(response => response.json())
+      .then(json => {
+        this.questionnaires = json
+      })
+    },
   },
-  mounted(){
-    fetch('http://localhost:5000/quiz/api/v1.0/questionnaire')
-    .then(response => response.json())
-    .then(json => {
-      this.questionnaires = json
-    })
-  },
-  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem }
+  components: { QuestionnaireItem, AjouterQuestionnaire, ModifierQuestionnaire, QuestionItem, SupprQuestionnaire}
 }
 </script>
 
@@ -105,6 +138,7 @@ export default {
   <h1>QUIZ</h1>
   <li v-for="q of questionnaires" :questionnaire="q">
     <QuestionnaireItem :questionnaire="q"/>
+    <SupprQuestionnaire :questionnaire="q" @remove="remove_questionnaire($event)" />
     <button @click="modifQuestionnaire=q">Modifier</button>
     <button @click="getQuestions(q.id)">voir les questions</button>
 
